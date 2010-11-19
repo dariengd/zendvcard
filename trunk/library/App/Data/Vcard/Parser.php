@@ -24,6 +24,7 @@ class App_Data_Vcard_Parser
 
 	protected function _parseName($value, $args = array())
 	{
+		var_dump($args);
 		$value = explode(';', $value);
 		if (isset($value[0]))
 		{
@@ -262,7 +263,31 @@ class App_Data_Vcard_Parser
 				$command = strtoupper($types[0]);
 				//var_dump($types);
 				array_shift($types);
-				//var_dump($types);
+				$i = 0;
+				foreach($types as $type)
+				{
+					if(strpos(strtolower($type), 'base64'))
+					{
+						$value = base64_decode($value);
+						unset($types[$i]);
+					}
+					elseif(strpos(strtolower($type), 'quoted-printable'))
+					{
+						$value = quoted_printable_decode($value);
+						unset($types[$i]);
+					}
+					elseif(strpos(strtolower($type), 'charset=') === 0)
+					{
+					try {
+						$value = mb_convert_encoding($value, "UTF-8", substr($type, 8));
+					}
+					catch (Exception $e)
+					{
+					}
+					 unset($types[$i]);
+					}
+					$i++;
+				}
 				if (in_array(strtoupper($command), array_keys($commands)))
 				{
 					if ($commands[$command] == 'im')
