@@ -206,6 +206,21 @@ class App_Data_Vcard_Parser
 		$this->_vcardCacheObject->addInstantmessenger($value, $messenger, $subArray);
 	}
 
+	protected function _parseGeo($value, $args = array())
+	{
+		$this->_vcardCacheObject->setGeolocation($value);
+	}
+
+	protected function _parseMailer($value, $args = array())
+	{
+		$this->_vcardCacheObject->setMailer($value);
+	}
+
+	protected function _parseTimezone($value, $args = array())
+	{
+		$this->_vcardCacheObject->setTimezone($value);
+	}
+
 	// Returns Vcard Object
 	public function parse()
 	{
@@ -232,7 +247,10 @@ class App_Data_Vcard_Parser
 				"X-YAHOO" => 'im',
 				"X-SKYPE" => 'im',
 				"X-SKYPE-USERNAME" => 'im',
-				"X-GADUGADU" => 'im');
+				"X-GADUGADU" => 'im',
+				"GEO" => 'geo',
+				"MAILER" => 'mailer',
+				"TZ" => 'timezone');
 		$this->_content = str_replace(array(App_Data_Vcard::LINEBREAK, "\r"), "\n", $this->_content);
 
 		//unfold
