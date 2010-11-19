@@ -24,7 +24,7 @@ class App_Data_Vcard_Parser
 
 	protected function _parseName($value, $args = array())
 	{
-		var_dump($args);
+		//var_dump($args);
 		$value = explode(';', $value);
 		if (isset($value[0]))
 		{
@@ -233,15 +233,19 @@ class App_Data_Vcard_Parser
 				"X-SKYPE" => 'im',
 				"X-SKYPE-USERNAME" => 'im',
 				"X-GADUGADU" => 'im');
-		$this->_content = str_replace(array(App_Data_Vcard::LINEBREAK, "\r", "\n"), PHP_EOL, $this->_content);
-		$lines = explode(PHP_EOL, $this->_content);
+		$this->_content = str_replace(array(App_Data_Vcard::LINEBREAK, "\r"), "\n", $this->_content);
+
+		//unfold
+		$this->_content = preg_replace("/\n(?:[ \t]+)/", "", $this->_content);
+//var_dump($this->_content);
+		$lines = explode("\n", $this->_content);
 
 		//Zend_Debug::dump($lines);
 
 		foreach ($lines as $line)
 		{
 			$line = trim($line);
-			//echo $line;
+			//echo $f . $line;
 			if (strtoupper($line) == "BEGIN:VCARD")
 			{
 				//echo 'Begin';
@@ -256,7 +260,7 @@ class App_Data_Vcard_Parser
 			{
 				$type = '';
 				$value = '';
-				echo $line;
+				//var_dump(explode(':', $line, 2));
 				list($type, $value) = explode(':', $line, 2);
 				$types = explode(';', $type);
 
@@ -267,6 +271,11 @@ class App_Data_Vcard_Parser
 				foreach($types as $type)
 				{
 					if(strpos(strtolower($type), 'base64'))
+					{
+						$value = base64_decode($value);
+						unset($types[$i]);
+					}
+					elseif(strpos(strtolower($type), 'encoding=b'))
 					{
 						$value = base64_decode($value);
 						unset($types[$i]);
