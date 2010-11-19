@@ -3,6 +3,30 @@
 class App_Data_Vcard_Generator
 {
 
+	protected static function _renderMailer($vcardObject)
+	{
+		if ($vcardObject->timezone)
+		{
+			return "TZ:" . $vcardObject->timezone . App_Data_Vcard::LINEBREAK;
+		}
+	}
+
+	protected static function _renderMailer($vcardObject)
+	{
+		if ($vcardObject->mailer)
+		{
+			return "MAILER:" . $vcardObject->mailer . App_Data_Vcard::LINEBREAK;
+		}
+	}
+
+	protected static function _renderGeolocation($vcardObject)
+	{
+		if ($vcardObject->geolocation)
+		{
+			return "GEO:" . $vcardObject->geolocation . App_Data_Vcard::LINEBREAK;
+		}
+	}
+
 	protected static function _renderBirthday($vcardObject)
 	{
 		if ($vcardObject->birthday)
@@ -256,6 +280,9 @@ class App_Data_Vcard_Generator
 			$vcardString .= self::_renderUid($vcardObject);
 			$vcardString .= self::_renderNickname($vcardObject, $version);
 			$vcardString .= self::_renderGender($vcardObject);
+			$vcardString .= self::_renderGeolocation($vcardObject);
+			$vcardString .= self::_renderMailer($vcardObject);
+			$vcardString .= self::_renderTimezone($vcardObject);
 			$vcardString .= self::_renderEnd();
 		}
 

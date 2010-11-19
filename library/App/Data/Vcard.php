@@ -21,6 +21,9 @@ class App_Data_Vcard
 	protected $_subdepartment = null;
 	protected $_role = null;
 	protected $_revision = null;
+	protected $_geolocation = null;
+	protected $_mailer = null;
+	protected $_timezone = null;
 	/**
 	 * @var array array(postofficeaddress, extendedaddress, street, city, state, zip, country, type=array())
 	 */
