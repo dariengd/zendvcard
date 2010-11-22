@@ -3,7 +3,7 @@
 class App_Data_Vcard_Generator
 {
 
-	protected static function _renderMailer($vcardObject)
+	protected static function _renderTimezone($vcardObject)
 	{
 		if ($vcardObject->timezone)
 		{
