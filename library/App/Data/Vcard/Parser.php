@@ -253,9 +253,13 @@ class App_Data_Vcard_Parser
 				"TZ" => 'timezone');
 		$this->_content = str_replace(array(App_Data_Vcard::LINEBREAK, "\r"), "\n", $this->_content);
 
-		//unfold
-		$this->_content = preg_replace("/\n(?:[ \t]+)/", "", $this->_content);
-//var_dump($this->_content);
+		// RFC2425 5.8.1.  Line delimiting and folding
+		// Unfolding is accomplished by regarding CRLF immediately
+        //followed by a white space character (namely HTAB ASCII decimal 9 or
+        //SPACE ASCII decimal 32) as equivalent to no characters at all (i.e.,
+        //the CRLF and single white space character are removed).   
+		$this->_content = preg_replace("/\n(?:[ \t])/", "", $this->_content);
+        //var_dump($this->_content);
 		$lines = explode("\n", $this->_content);
 
 		//Zend_Debug::dump($lines);
